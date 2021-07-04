@@ -1,9 +1,21 @@
 import { Injectable } from '@nestjs/common';
-import { CreatePodcastDto } from './dtos/create-podcast.dto';
+import {
+  CreatePodcastDto,
+  CreatePodcastOutputDto,
+} from './dtos/create-podcast.dto';
+import { GetPodcastOutputDto } from './dtos/get-podcast.dto';
 import { UpdateEpisodeDto } from './dtos/update-episode.dto';
 import { UpdatePodcastDto } from './dtos/update-podcast.dto';
-import { Episode } from './entities/episode.entity';
 import { Podcast } from './entities/podcast.entity';
+import { CoreErrOutputDto } from './dtos/output.dto';
+import {
+  FindEpisodeOutputDto,
+  GetEpisodesOutputDto,
+} from './dtos/get-episode.dto';
+import {
+  CreateEpisodeDto,
+  CreateEpisodeOutputDto,
+} from './dtos/create-episode.dto';
 
 @Injectable()
 export class PodcastsService {
@@ -13,10 +25,7 @@ export class PodcastsService {
     return { podcasts: this.podcasts, err: null };
   }
 
-  createPodcast({ title, category }: CreatePodcastDto): {
-    id: number;
-    err: string | null;
-  } {
+  createPodcast({ title, category }: CreatePodcastDto): CreatePodcastOutputDto {
     const id = Date.now();
     this.podcasts.push({
       id,
@@ -28,7 +37,7 @@ export class PodcastsService {
     return { id, err: null };
   }
 
-  getPodcast(podcastID: string): { podcast: Podcast; err: string | null } {
+  getPodcast(podcastID: number): GetPodcastOutputDto {
     const foundPodcast = this.podcasts.filter(
       (podcast) => podcast.id === +podcastID,
     );
@@ -46,21 +55,19 @@ export class PodcastsService {
     }
   }
 
-  deletePodcast(podcastID: string): { err: string | null } {
+  deletePodcast(podcastID: number): CoreErrOutputDto {
     const { err } = this.getPodcast(podcastID);
     if (err) {
       return { err };
     }
-    this.podcasts = this.podcasts.filter(
-      (podcast) => podcast.id !== +podcastID,
-    );
+    this.podcasts = this.podcasts.filter((podcast) => podcast.id !== podcastID);
     return { err: null };
   }
 
   updatePodcast(
-    podcastID: string,
+    podcastID: number,
     updatePodcastDto: UpdatePodcastDto,
-  ): { err: string | null } {
+  ): CoreErrOutputDto {
     const { podcast, err: findErr } = this.getPodcast(podcastID);
     if (findErr) {
       return { err: findErr };
@@ -75,10 +82,7 @@ export class PodcastsService {
     });
   }
 
-  getEpisodes(podcastID: string): {
-    episodes: Episode[];
-    err: string | null;
-  } {
+  getEpisodes(podcastID: number): GetEpisodesOutputDto {
     const { podcast, err: findErr } = this.getPodcast(podcastID);
     if (findErr) {
       return { episodes: null, err: findErr };
@@ -87,9 +91,9 @@ export class PodcastsService {
   }
 
   createEpisode(
-    podcastID: string,
-    episodeData: Episode,
-  ): { id: number; err: string | null } {
+    podcastID: number,
+    createEpisodeDto: CreateEpisodeDto,
+  ): CreateEpisodeOutputDto {
     const { podcast, err: findErr } = this.getPodcast(podcastID);
     if (findErr) {
       return { id: null, err: findErr };
@@ -98,15 +102,12 @@ export class PodcastsService {
     podcast.episodes.push({
       id,
       rating: 0,
-      ...episodeData,
+      ...createEpisodeDto,
     });
     return { id, err: null };
   }
 
-  findEpisode(
-    podcastID: string,
-    episodeID: string,
-  ): { episode: Episode; err: string | null } {
+  findEpisode(podcastID: number, episodeID: number): FindEpisodeOutputDto {
     const { podcast, err: findErr } = this.getPodcast(podcastID);
     if (findErr) {
       return { episode: null, err: findErr };
@@ -120,7 +121,7 @@ export class PodcastsService {
     return { episode, err: null };
   }
 
-  deleteEpisode(podcastID: string, episodeID: string): { err: string | null } {
+  deleteEpisode(podcastID: number, episodeID: number): CoreErrOutputDto {
     this.findEpisode(podcastID, episodeID);
     const { podcast, err: findErr } = this.getPodcast(podcastID);
     if (findErr) {
@@ -133,10 +134,10 @@ export class PodcastsService {
   }
 
   updateEpisode(
-    podcastID: string,
-    episodeID: string,
+    podcastID: number,
+    episodeID: number,
     updateEpisodeDto: UpdateEpisodeDto,
-  ): { err: string | null } {
+  ): CoreErrOutputDto {
     const { podcast, err: findErr } = this.getPodcast(podcastID);
     if (findErr) {
       return { err: findErr };
