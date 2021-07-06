@@ -1,12 +1,14 @@
-import { Field, InputType, ObjectType } from '@nestjs/graphql';
+import { Field, InputType } from '@nestjs/graphql';
+import { IsString } from 'class-validator';
 import { CreatePodcastDto } from './create-podcast.dto';
-import { CoreErrOutputDto } from './output.dto';
 
 @InputType()
-export class CreateEpisodeDto extends CreatePodcastDto {}
+export class CreateEpisodeDto extends CreatePodcastDto {
+  @Field((type) => String)
+  @IsString()
+  readonly title: string;
 
-@ObjectType()
-export class CreateEpisodeOutputDto extends CoreErrOutputDto {
-  @Field((type) => Number)
-  id: number;
+  @Field((type) => String)
+  @IsString()
+  readonly category: string;
 }
