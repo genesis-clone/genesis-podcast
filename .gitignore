@@ -1,9 +1,15 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 2a8320876be55f49fa9bca70740c8e49952918d9
 # compiled output
 /dist
 /node_modules
 
+<<<<<<< HEAD
+>>>>>>> 2a8320876be55f49fa9bca70740c8e49952918d9
+=======
 >>>>>>> 2a8320876be55f49fa9bca70740c8e49952918d9
 # Logs
 logs
@@ -12,6 +18,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
+<<<<<<< HEAD
 <<<<<<< HEAD
 .pnpm-debug.log*
 
@@ -126,6 +133,8 @@ dist
 .yarn/install-state.gz
 .pnp.*
 =======
+=======
+>>>>>>> 2a8320876be55f49fa9bca70740c8e49952918d9
 
 # OS
 .DS_Store
@@ -148,5 +157,9 @@ dist
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
+<<<<<<< HEAD
+!.vscode/extensions.json
+>>>>>>> 2a8320876be55f49fa9bca70740c8e49952918d9
+=======
 !.vscode/extensions.json
 >>>>>>> 2a8320876be55f49fa9bca70740c8e49952918d9
