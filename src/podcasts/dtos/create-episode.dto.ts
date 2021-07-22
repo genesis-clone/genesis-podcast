@@ -1,14 +1,9 @@
-import { Field, InputType, OmitType } from '@nestjs/graphql';
+import { InputType, IntersectionType, PickType } from '@nestjs/graphql';
 import { Episode } from 'src/podcasts/entities/episode.entity';
+import { PodcastSearchInput } from './podcast.dto';
 
 @InputType()
-class CreateEpisodeInputType extends OmitType(Episode, ['id', 'podcast']) {}
-
-@InputType()
-export class CreateEpisodeDto {
-  @Field((type) => Number)
-  id: number;
-
-  @Field((type) => CreateEpisodeInputType)
-  data: CreateEpisodeInputType;
-}
+export class CreateEpisodeDto extends IntersectionType(
+  PodcastSearchInput,
+  PickType(Episode, ['title', 'category'] as const),
+) {}

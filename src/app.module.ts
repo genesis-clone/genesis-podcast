@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { PodcastsModule } from './podcasts/podcasts.module';
 import { Podcast } from './podcasts/entities/podcast.entity';
 import { Episode } from './podcasts/entities/episode.entity';
+import { CoreEntity } from './common/entities/core.entity';
 
 @Module({
   imports: [
@@ -31,7 +32,7 @@ import { Episode } from './podcasts/entities/episode.entity';
       database: process.env.DB_NAME,
       synchronize: process.env.NODE_ENV !== 'prod',
       logging: true,
-      entities: [Podcast, Episode],
+      entities: [Podcast, Episode, CoreEntity],
     }),
     GraphQLModule.forRoot({ autoSchemaFile: true }),
     PodcastsModule,

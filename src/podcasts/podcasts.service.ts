@@ -5,7 +5,7 @@ import {
   CreatePodcastDto,
   CreatePodcastOutput,
 } from './dtos/create-podcast.dto';
-import { CoreOutput } from './dtos/output.dto';
+import { CoreOutput } from '../common/dtos/output.dto';
 import {
   EpisodesOutput,
   EpisodesSearchInput,
@@ -97,13 +97,13 @@ export class PodcastsService {
     }
   }
 
-  async updatePodcast({ id, data }: UpdatePodcastDto): Promise<CoreOutput> {
+  async updatePodcast({ id, ...rest }: UpdatePodcastDto): Promise<CoreOutput> {
     try {
       const { ok, error, podcast } = await this.getPodcast(id);
       if (!ok) {
         return { ok, error };
       }
-      await this.podcasts.save({ ...podcast, ...data });
+      await this.podcasts.save({ ...podcast, ...rest });
       return { ok };
     } catch (error) {
       return { ok: false, error: `Something went wrong!` };
@@ -128,14 +128,15 @@ export class PodcastsService {
 
   async createEpisode({
     id: podcastId,
-    data,
+    title,
+    category,
   }: CreateEpisodeDto): Promise<CoreOutput> {
     try {
       const { podcast, ok, error } = await this.getPodcast(podcastId);
       if (!ok) {
         return { ok, error };
       }
-      const newEpisode = { ...data, podcast };
+      const newEpisode = { title, category, podcast };
       this.episodes.save(this.episodes.create(newEpisode));
       return { ok };
     } catch (error) {
