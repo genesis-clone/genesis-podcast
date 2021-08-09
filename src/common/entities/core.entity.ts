@@ -2,7 +2,6 @@ import { Field, ObjectType } from '@nestjs/graphql';
 import { IsDate, IsNumber } from 'class-validator';
 import {
   CreateDateColumn,
-  Entity,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
